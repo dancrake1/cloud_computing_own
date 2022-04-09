@@ -11,7 +11,6 @@ from userDB.setupDB import user
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userDB//auth.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 app.config['SECRET_KEY'] = '{Your Secret Key}'
 
 db = SQLAlchemy(app)
@@ -89,28 +88,23 @@ def login():
         if user and check_password_hash(user.pass_hash, password):
             session[username] = True
             return redirect(url_for("user_home", username=username))
-        else:
             flash("Invalid username or password.")
 
     return render_template("login_form.html")
 
 @app.route("/user/<username>/", methods = ["GET", "POST"])
 def user_home(username):
-	if request.method == "GET":
-		return redirect(url_for("result", username=username))
+    if request.method == "GET":
+        url = "https://owen-wilson-wow-api.herokuapp.com/wows/random"
+        resp = requests.get(url)
+        response = resp.json()
+        movie = response[0].get('movie')
+        director = response[0].get('director')
+        year = response[0].get('year')
+    if request.method == "POST":
+        return [movie,director,year]
 
-	return render_template("user_home.html", username=username)
-
-@app.route("/user/<username>/result/",methods = ["GET"])
-def result(username):
-    url = "https://owen-wilson-wow-api.herokuapp.com/wows/random"
-    resp = requests.get(url)
-    response = resp.json()
-    movie = response[0].get('movie')
-    director = response[0].get('director')
-    year = response[0].get('year')	
-
-    return render_template("result.html",username=username, movie = movie, director=director, year=year)
+    return render_template("user_home.html", username=username, movie=movie, director=director, year=year)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
