@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+</head>
+<body>
+<table border = 3>
+	<tr>
+		<th> Movie  </th>
+		<th> Director </th>
+                <th> Year </th>
+                <th> Score </th>
+	</tr>
+        <tr>
+                <td> {{movie}}  </td>
+                <td> {{director}} </td>
+                <td> {{year}} </td>
+   		<td><input type ="number" min= "0" max="10" step="0.1" name="rating"></td>
+	</tr>
+
+      </table>
+<button onclick="goBack()">Go Back</button>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+</body>
+</html>
