@@ -7,9 +7,26 @@
   <h1>Hello {{username.title()}}</h1>
 
   <h2>Generate Random Owen Wow!</h2>
-  <form action="{{url_for('user_home')}}" method="get">
-  	<input type="submit" text="Generate" />
+  <form action="{{url_for('user_home',username = username)}}" method="get">
+  	<input type="submit" value="WOW!" />
   </form>
+<table border = 3>
+	<tr>
+		<th> Movie  </th>
+		<th> Director </th>
+                <th> Year </th>
+                <th> Score </th>
+                <th> Submit </th>
+	</tr>
+        <tr>
+                <td> {{movie}}  </td>
+                <td> {{director}} </td>
+                <td> {{year}} </td>
+   		<td><input type ="number" min= "0" max="10" step="0.1" name="rating"></td>
+                <td><form action="{{url_for('user_home', username = username, movie = movie, director = director, year = year)}}" method="post"><input type ="submit",value="Submit"></form></td>	
+	</tr>
+
+      </table>
   <p><a href="Hello">Logout</a></p>
 </body>
 </html>
