@@ -23,6 +23,27 @@ class User(db.Model):
     def __repr__(self):
         return '' % self.username
 
+db_name = "movie.db"
+app2 = Flask(__name__)
+app2.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userDB//{db}'.format(db=db_name)
+app2.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #SECRET_KEY required for session, flash and Flask Sqlalchemy to work
+app2.config['SECRET_KEY'] = '{Your Secret Key}'
+
+db2 = SQLAlchemy(app2)
+
+
+class Movie(db2.Model):
+
+    l_id = db2.Column(db2.Integer, primary_key=True)
+    username_reviewer = db2.Column(db2.String(100), unique=True, nullable=False)
+    movie_name = db2.Column(db2.String(100),nullable=False)
+    director = db2.Column(db2.String(100),nullable=False)
+    year = db2.Column(db2.Integer,nullable=False)
+    score = db2.Column(db2.Integer,nullable=True)
+
+    def __repr__(self):
+        return '' % self.username_reviewer
+
 
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
@@ -101,11 +122,17 @@ def user_home(username):
         movie = response[0].get('movie')
         director = response[0].get('director')
         year = response[0].get('year')
-        
-        movie1, director1, year1 = str(movie), str(director), str(year)
-    if request.method == "POST":
-        return [movie1,director1,year1]
 
+    if request.method == "POST":
+        movie = 'hi'
+        director = 'hi'
+        year = int(1090)
+        score = int(10)
+        new_movie = Movie(username_reviewer=username, movie_name=movie, director = director, year=year, score=score)
+        db2.session.add(new_movie)
+        db2.session.commit()
+        user_list = Movie.query.filter_by(username_reviewer=username).all()
+        return user_list.director
     return render_template("user_home.html", username=username, movie=movie, director=director, year=year)
 
 if __name__ == '__main__':
